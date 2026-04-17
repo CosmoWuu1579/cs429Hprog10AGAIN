@@ -164,7 +164,7 @@ module rob (
                 if (r_is_halt[head]) begin
                     hlt       <= 1;
                     do_flush   = 0;
-                end else if (r_is_branch[head] && r_mis_pred[head]) begin
+                end else if (r_is_branch[head] && (r_actual_pc[head] != r_pred_pc[head])) begin
                     flush          <= 1;
                     flush_pc       <= r_actual_pc[head];
                     flush_rat_snap <= r_rat_snap [head];
@@ -185,7 +185,7 @@ module rob (
                         r_valid[head+1]  <= 0;
                         commit_cnt        = 2;
 
-                        if (r_is_branch[head+1] && r_mis_pred[head+1]) begin
+                        if (r_is_branch[head+1] && (r_actual_pc[head+1] != r_pred_pc[head+1])) begin
                             flush          <= 1;
                             flush_pc       <= r_actual_pc[head+1];
                             flush_rat_snap <= r_rat_snap [head+1];

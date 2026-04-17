@@ -68,10 +68,12 @@ module rat (
     input  wire        commit1_en,
     input  wire [4:0]  commit1_areg,
     input  wire [5:0]  commit1_preg,
-    input  wire [5:0]  commit1_old
+    input  wire [5:0]  commit1_old,
+    output wire [191:0] rat_map_out
 );
     localparam NPHYS = 64;
 
+    reg [63:0] recovered_free_list;
     // RAT: arch → phys mapping (current speculative state)
     reg [5:0]  rat_map [0:31];
     // Physical register file
@@ -147,10 +149,16 @@ module rat (
             // phys 0-31 occupied, 32-63 free
             free_list <= 64'hFFFF_FFFF_0000_0000;
         end else if (flush) begin
-            // Restore RAT from snapshot; free list and phys file are updated
-            // by the ROB flushing allocated physical regs back to free list.
-            for (i = 0; i < 32; i = i + 1)
+            // // Restore RAT from snapshot; free list and phys file are updated
+            // // by the ROB flushing allocated physical regs back to free list.
+            // for (i = 0; i < 32; i = i + 1)
+            //     rat_map[i] <= flush_rat_snap[i*6 +: 6];
+            recovered_free_list = 64'hFFFF_FFFF_FFFF_FFFF;
+            for (i = 0; i < 32; i = i + 1) begin
                 rat_map[i] <= flush_rat_snap[i*6 +: 6];
+                recovered_free_list[flush_rat_snap[i*6 +: 6]] = 1'b0;
+            end
+            free_list <= recovered_free_list;
         end else begin
             // CDB writes (update phys file, mark ready)
             if (cdb0_valid) begin
@@ -184,4 +192,11 @@ module rat (
             end
         end
     end
+
+    genvar g;
+    generate
+        for (g = 0; g < 32; g = g + 1) begin : gen_rat_snap
+            assign rat_map_out[g*6 +: 6] = rat_map[g];
+        end
+    endgenerate
 endmodule

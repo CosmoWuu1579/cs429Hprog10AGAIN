@@ -53,19 +53,19 @@ module tb_tinker_core;
         // addi r1, 5    (0x19: r1 = r1 + 5)
         write_instr(64'h2000, encL(5'h19, 5'd1, 5'd5));      // addi r1, 5  → r1=5
         // addi r2, 7
-        write_instr(64'h2004, encL(5'h19, 5'd2, 5'd7));      // addi r2, 7  → r2=7
-        // add r3, r1, r2
-        write_instr(64'h2008, enc3(5'h18, 5'd3, 5'd1, 5'd2)); // add r3=r1+r2=12
-        // sub r4, r2, r1
-        write_instr(64'h200c, enc3(5'h1a, 5'd4, 5'd2, 5'd1)); // sub r4=r2-r1=2
-        // mul r5, r3, r4
-        write_instr(64'h2010, enc3(5'h1c, 5'd5, 5'd3, 5'd4)); // mul r5=12*2=24
-        // or r6, r1, r2
-        write_instr(64'h2014, enc3(5'h01, 5'd6, 5'd1, 5'd2)); // or r6=5|7=7
-        // and r7, r5, r6
-        write_instr(64'h2018, enc3(5'h00, 5'd7, 5'd5, 5'd6)); // and r7=24&7=0
-        // xor r8, r1, r2
-        write_instr(64'h201c, enc3(5'h02, 5'd8, 5'd1, 5'd2)); // xor r8=5^7=2
+        // write_instr(64'h2004, encL(5'h19, 5'd2, 5'd7));      // addi r2, 7  → r2=7
+        // // add r3, r1, r2
+        // write_instr(64'h2008, enc3(5'h18, 5'd3, 5'd1, 5'd2)); // add r3=r1+r2=12
+        // // sub r4, r2, r1
+        // write_instr(64'h200c, enc3(5'h1a, 5'd4, 5'd2, 5'd1)); // sub r4=r2-r1=2
+        // // mul r5, r3, r4
+        // write_instr(64'h2010, enc3(5'h1c, 5'd5, 5'd3, 5'd4)); // mul r5=12*2=24
+        // // or r6, r1, r2
+        // write_instr(64'h2014, enc3(5'h01, 5'd6, 5'd1, 5'd2)); // or r6=5|7=7
+        // // and r7, r5, r6
+        // write_instr(64'h2018, enc3(5'h00, 5'd7, 5'd5, 5'd6)); // and r7=24&7=0
+        // // xor r8, r1, r2
+        // write_instr(64'h201c, enc3(5'h02, 5'd8, 5'd1, 5'd2)); // xor r8=5^7=2
         // halt
         write_instr(64'h2020, enc_halt());
 

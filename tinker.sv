@@ -284,7 +284,7 @@ wire ren1_en = dispatch1_en && dec1_reg_wr;
 
 // RAT snapshot (full correctness requires exporting rat_map; use 0 as placeholder —
 // misprediction recovery will use committed reg_file values to rebuild state).
-wire [191:0] rat_snap = 192'b0;
+wire [191:0] rat_snap;
 
 // ---------------------------------------------------------------------------
 // r31 for ALU (stack pointer — use architectural committed value)
@@ -368,7 +368,8 @@ rat rat_inst (
     .commit0_en(commit0_en), .commit0_areg(commit0_areg),
     .commit0_preg(commit0_preg), .commit0_old(commit0_old),
     .commit1_en(commit1_en), .commit1_areg(commit1_areg),
-    .commit1_preg(commit1_preg), .commit1_old(commit1_old)
+    .commit1_preg(commit1_preg), .commit1_old(commit1_old),
+    .rat_map_out(rat_snap)
 );
 
 // ---------------------------------------------------------------------------
