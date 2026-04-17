@@ -12,6 +12,39 @@
 module rat (
     input  clk,
     input  reset,
+    input wire [63:0] reg_array_out_0,
+    input wire [63:0] reg_array_out_1,
+    input wire [63:0] reg_array_out_2,
+    input wire [63:0] reg_array_out_3,
+    input wire [63:0] reg_array_out_4,
+    input wire [63:0] reg_array_out_5,
+    input wire [63:0] reg_array_out_6,
+    input wire [63:0] reg_array_out_7,
+    input wire [63:0] reg_array_out_8,
+    input wire [63:0] reg_array_out_9,
+    input wire [63:0] reg_array_out_10,
+    input wire [63:0] reg_array_out_11,
+    input wire [63:0] reg_array_out_12,
+    input wire [63:0] reg_array_out_13,
+    input wire [63:0] reg_array_out_14,
+    input wire [63:0] reg_array_out_15,
+    input wire [63:0] reg_array_out_16,
+    input wire [63:0] reg_array_out_17,
+    input wire [63:0] reg_array_out_18,
+    input wire [63:0] reg_array_out_19,
+    input wire [63:0] reg_array_out_20,
+    input wire [63:0] reg_array_out_21,
+    input wire [63:0] reg_array_out_22,
+    input wire [63:0] reg_array_out_23,
+    input wire [63:0] reg_array_out_24,
+    input wire [63:0] reg_array_out_25,
+    input wire [63:0] reg_array_out_26,
+    input wire [63:0] reg_array_out_27,
+    input wire [63:0] reg_array_out_28,
+    input wire [63:0] reg_array_out_29,
+    input wire [63:0] reg_array_out_30,
+    input wire [63:0] reg_array_out_31,
+
     // Flush (branch misprediction): restore RAT from snapshot
     input  wire        flush,
     input  wire [191:0] flush_rat_snap, // 32 × 6-bit snapshot
@@ -89,6 +122,8 @@ module rat (
     reg [5:0]  free1_idx;  // second free phys reg
     reg        found0, found1;
 
+
+
     always @(*) begin
         free0_idx = 6'd63; free1_idx = 6'd63;
         found0 = 0; found1 = 0;
@@ -115,27 +150,83 @@ module rat (
     assign rename0_old_preg = rat_map[rename0_d];
     assign rename0_s_preg   = rat_map[rename0_s];
     assign rename0_t_preg   = rat_map[rename0_t];
-    assign rename0_s_val    = phys_regs[rat_map[rename0_s]];
-    assign rename0_t_val    = phys_regs[rat_map[rename0_t]];
+    // assign rename0_s_val    = phys_regs[rat_map[rename0_s]];
+    // assign rename0_t_val    = phys_regs[rat_map[rename0_t]];
     assign rename0_s_rdy    = phys_rdy[rat_map[rename0_s]];
     assign rename0_t_rdy    = phys_rdy[rat_map[rename0_t]];
     // Extra: current value of dest arch reg (before rename) — for brgt rd_val
-    assign rename0_old_val  = phys_regs[rat_map[rename0_d]];
+    // assign rename0_old_val  = phys_regs[rat_map[rename0_d]];
     assign rename0_old_rdy  = phys_rdy [rat_map[rename0_d]];
 
     assign rename1_new_preg = free1_idx;
     assign rename1_old_preg = (rename0_en && rename1_d == rename0_d) ? free0_idx : rat_map[rename1_d];
     assign rename1_s_preg   = rat1_s;
     assign rename1_t_preg   = rat1_t;
-    assign rename1_s_val    = phys_regs[rat1_s];
-    assign rename1_t_val    = phys_regs[rat1_t];
+    // assign rename1_s_val    = phys_regs[rat1_s];
+    // assign rename1_t_val    = phys_regs[rat1_t];
     assign rename1_s_rdy    = phys_rdy[rat1_s];
     assign rename1_t_rdy    = phys_rdy[rat1_t];
-    assign rename1_old_val  = phys_regs[rat_map[rename1_d]];
+    // assign rename1_old_val  = phys_regs[rat_map[rename1_d]];
     assign rename1_old_rdy  = phys_rdy [rat_map[rename1_d]];
 
+    
+    // Add this declaration above your always block
+    reg [31:0] is_initial;
+    // Replace your current value assignments with these:
+    wire [5:0] s0_idx = rat_map[rename0_s];
+    wire [5:0] t0_idx = rat_map[rename0_t];
+    wire [5:0] d0_idx = rat_map[rename0_d];
+
+    // Bundle the individual ports back into an indexable internal array
+    wire [63:0] arch_regs_in [0:31];
+    assign arch_regs_in[0] = reg_array_out_0;
+    assign arch_regs_in[1] = reg_array_out_1;
+    assign arch_regs_in[2] = reg_array_out_2;
+    assign arch_regs_in[3] = reg_array_out_3;
+    assign arch_regs_in[4] = reg_array_out_4;
+    assign arch_regs_in[5] = reg_array_out_5;
+    assign arch_regs_in[6] = reg_array_out_6;
+    assign arch_regs_in[7] = reg_array_out_7;
+    assign arch_regs_in[8] = reg_array_out_8;
+    assign arch_regs_in[9] = reg_array_out_9;
+    assign arch_regs_in[10] = reg_array_out_10;
+    assign arch_regs_in[11] = reg_array_out_11;
+    assign arch_regs_in[12] = reg_array_out_12;
+    assign arch_regs_in[13] = reg_array_out_13;
+    assign arch_regs_in[14] = reg_array_out_14;
+    assign arch_regs_in[15] = reg_array_out_15;
+    assign arch_regs_in[16] = reg_array_out_16;
+    assign arch_regs_in[17] = reg_array_out_17;
+    assign arch_regs_in[18] = reg_array_out_18;
+    assign arch_regs_in[19] = reg_array_out_19;
+    assign arch_regs_in[20] = reg_array_out_20;
+    assign arch_regs_in[21] = reg_array_out_21;
+    assign arch_regs_in[22] = reg_array_out_22;
+    assign arch_regs_in[23] = reg_array_out_23;
+    assign arch_regs_in[24] = reg_array_out_24;
+    assign arch_regs_in[25] = reg_array_out_25;
+    assign arch_regs_in[26] = reg_array_out_26;
+    assign arch_regs_in[27] = reg_array_out_27;
+    assign arch_regs_in[28] = reg_array_out_28;
+    assign arch_regs_in[29] = reg_array_out_29;
+    assign arch_regs_in[30] = reg_array_out_30;
+    assign arch_regs_in[31] = reg_array_out_31;
+    
+    assign rename0_s_val   = (s0_idx < 32 && is_initial[s0_idx[4:0]]) ? arch_regs_in[s0_idx[4:0]] : phys_regs[s0_idx];
+    assign rename0_t_val   = (t0_idx < 32 && is_initial[t0_idx[4:0]]) ? arch_regs_in[t0_idx[4:0]] : phys_regs[t0_idx];
+    assign rename0_old_val = (d0_idx < 32 && is_initial[d0_idx[4:0]]) ? arch_regs_in[d0_idx[4:0]] : phys_regs[d0_idx];
+
+    wire [5:0] s1_idx = rat1_s;
+    wire [5:0] t1_idx = rat1_t;
+    wire [5:0] d1_idx = rat_map[rename1_d];
+
+    assign rename1_s_val   = (s1_idx < 32 && is_initial[s1_idx[4:0]]) ? arch_regs_in[s1_idx[4:0]] : phys_regs[s1_idx];
+    assign rename1_t_val   = (t1_idx < 32 && is_initial[t1_idx[4:0]]) ? arch_regs_in[t1_idx[4:0]] : phys_regs[t1_idx];
+    assign rename1_old_val = (d1_idx < 32 && is_initial[d1_idx[4:0]]) ? arch_regs_in[d1_idx[4:0]] : phys_regs[d1_idx];
     always @(posedge clk) begin
         if (reset) begin
+            is_initial <= 32'hFFFF_FFFF; // <--- ADD THIS (all start as initial)
+
             // Identity mapping: arch[i] → phys[i], regs 0-31 ready with 0 / MEM_SIZE
             for (i = 0; i < 32; i = i + 1) begin
                 rat_map[i]   <= i[5:0];
@@ -164,10 +255,12 @@ module rat (
             if (cdb0_valid) begin
                 phys_regs[cdb0_preg] <= cdb0_data;
                 phys_rdy[cdb0_preg]  <= 1;
+                if (cdb0_preg < 32) is_initial[cdb0_preg[4:0]] <= 0; // <--- ADD THIS
             end
             if (cdb1_valid) begin
                 phys_regs[cdb1_preg] <= cdb1_data;
                 phys_rdy[cdb1_preg]  <= 1;
+                if (cdb1_preg < 32) is_initial[cdb1_preg[4:0]] <= 0; // <--- ADD THIS
             end
 
             // Commit: make old phys reg free, no RAT change needed
@@ -192,6 +285,7 @@ module rat (
             end
         end
     end
+
 
     genvar g;
     generate

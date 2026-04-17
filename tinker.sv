@@ -332,8 +332,73 @@ instruction_decoder idec1 (.instruction(f_instr1), .opcode(dec1_op), .d(dec1_d),
 // ---------------------------------------------------------------------------
 // Architectural register file (for committed state)
 // ---------------------------------------------------------------------------
+wire [63:0] reg_array_out_0;
+wire [63:0] reg_array_out_1;
+wire [63:0] reg_array_out_2;
+wire [63:0] reg_array_out_3;
+wire [63:0] reg_array_out_4;
+wire [63:0] reg_array_out_5;
+wire [63:0] reg_array_out_6;
+wire [63:0] reg_array_out_7;
+wire [63:0] reg_array_out_8;
+wire [63:0] reg_array_out_9;
+wire [63:0] reg_array_out_10;
+wire [63:0] reg_array_out_11;
+wire [63:0] reg_array_out_12;
+wire [63:0] reg_array_out_13;
+wire [63:0] reg_array_out_14;
+wire [63:0] reg_array_out_15;
+wire [63:0] reg_array_out_16;
+wire [63:0] reg_array_out_17;
+wire [63:0] reg_array_out_18;
+wire [63:0] reg_array_out_19;
+wire [63:0] reg_array_out_20;
+wire [63:0] reg_array_out_21;
+wire [63:0] reg_array_out_22;
+wire [63:0] reg_array_out_23;
+wire [63:0] reg_array_out_24;
+wire [63:0] reg_array_out_25;
+wire [63:0] reg_array_out_26;
+wire [63:0] reg_array_out_27;
+wire [63:0] reg_array_out_28;
+wire [63:0] reg_array_out_29;
+wire [63:0] reg_array_out_30;
+wire [63:0] reg_array_out_31;
+
 register_file reg_file (
     .clk(clk), .reset(reset),
+    .reg_array_out_0(reg_array_out_0),
+    .reg_array_out_1(reg_array_out_1),
+    .reg_array_out_2(reg_array_out_2),
+    .reg_array_out_3(reg_array_out_3),
+    .reg_array_out_4(reg_array_out_4),
+    .reg_array_out_5(reg_array_out_5),
+    .reg_array_out_6(reg_array_out_6),
+    .reg_array_out_7(reg_array_out_7),
+    .reg_array_out_8(reg_array_out_8),
+    .reg_array_out_9(reg_array_out_9),
+    .reg_array_out_10(reg_array_out_10),
+    .reg_array_out_11(reg_array_out_11),
+    .reg_array_out_12(reg_array_out_12),
+    .reg_array_out_13(reg_array_out_13),
+    .reg_array_out_14(reg_array_out_14),
+    .reg_array_out_15(reg_array_out_15),
+    .reg_array_out_16(reg_array_out_16),
+    .reg_array_out_17(reg_array_out_17),
+    .reg_array_out_18(reg_array_out_18),
+    .reg_array_out_19(reg_array_out_19),
+    .reg_array_out_20(reg_array_out_20),
+    .reg_array_out_21(reg_array_out_21),
+    .reg_array_out_22(reg_array_out_22),
+    .reg_array_out_23(reg_array_out_23),
+    .reg_array_out_24(reg_array_out_24),
+    .reg_array_out_25(reg_array_out_25),
+    .reg_array_out_26(reg_array_out_26),
+    .reg_array_out_27(reg_array_out_27),
+    .reg_array_out_28(reg_array_out_28),
+    .reg_array_out_29(reg_array_out_29),
+    .reg_array_out_30(reg_array_out_30),
+    .reg_array_out_31(reg_array_out_31),
     .d(5'd31), .s(5'd0), .t(5'd0),
     .rd(arch_r31_wire), .rs(dummy_rs), .rt(dummy_rt), .stack_pointer(dummy_sp),
     .write0(commit0_en && commit0_reg_wr),
@@ -347,6 +412,38 @@ register_file reg_file (
 // ---------------------------------------------------------------------------
 rat rat_inst (
     .clk(clk), .reset(reset),
+    .reg_array_out_0(reg_array_out_0),
+    .reg_array_out_1(reg_array_out_1),
+    .reg_array_out_2(reg_array_out_2),
+    .reg_array_out_3(reg_array_out_3),
+    .reg_array_out_4(reg_array_out_4),
+    .reg_array_out_5(reg_array_out_5),
+    .reg_array_out_6(reg_array_out_6),
+    .reg_array_out_7(reg_array_out_7),
+    .reg_array_out_8(reg_array_out_8),
+    .reg_array_out_9(reg_array_out_9),
+    .reg_array_out_10(reg_array_out_10),
+    .reg_array_out_11(reg_array_out_11),
+    .reg_array_out_12(reg_array_out_12),
+    .reg_array_out_13(reg_array_out_13),
+    .reg_array_out_14(reg_array_out_14),
+    .reg_array_out_15(reg_array_out_15),
+    .reg_array_out_16(reg_array_out_16),
+    .reg_array_out_17(reg_array_out_17),
+    .reg_array_out_18(reg_array_out_18),
+    .reg_array_out_19(reg_array_out_19),
+    .reg_array_out_20(reg_array_out_20),
+    .reg_array_out_21(reg_array_out_21),
+    .reg_array_out_22(reg_array_out_22),
+    .reg_array_out_23(reg_array_out_23),
+    .reg_array_out_24(reg_array_out_24),
+    .reg_array_out_25(reg_array_out_25),
+    .reg_array_out_26(reg_array_out_26),
+    .reg_array_out_27(reg_array_out_27),
+    .reg_array_out_28(reg_array_out_28),
+    .reg_array_out_29(reg_array_out_29),
+    .reg_array_out_30(reg_array_out_30),
+    .reg_array_out_31(reg_array_out_31),
     .flush(flush_sig), .flush_rat_snap(flush_rat_snap),
     .rename0_en(ren0_en),
     .rename0_d(dec0_d), .rename0_s(eff_s0), .rename0_t(eff_t0),

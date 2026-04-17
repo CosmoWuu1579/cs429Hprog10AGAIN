@@ -51,7 +51,11 @@ module tb_tinker_core;
         // -------------------------------------------------------------------
         // Test 1: add r1, r2, r3  (r1 = r2 + r3 = 0+0=0, then addi r1,5 → r1=5)
         // addi r1, 5    (0x19: r1 = r1 + 5)
-        write_instr(64'h2000, encL(5'h19, 5'd1, 5'd5));      // addi r1, 5  → r1=5
+
+        
+        write_instr(64'h2000, enc3(5'h18, 5'd2, 5'd0, 5'd1));
+        write_instr(64'h2004, enc_halt());
+        // write_instr(64'h2000, encL(5'h19, 5'd1, 5'd5));    // addi r1, 5  → r1=5
         // addi r2, 7
         // write_instr(64'h2004, encL(5'h19, 5'd2, 5'd7));      // addi r2, 7  → r2=7
         // // add r3, r1, r2
@@ -71,6 +75,16 @@ module tb_tinker_core;
 
         @(posedge clk); @(posedge clk);
         reset = 0;
+        // Wait one full cycle with reset=0 so the RAT's reset NBA (which zeros phys_regs)
+        // has already fired before we pre-load values. Writing at the same timestep as
+        // reset=0 loses the race to the NBA update phase.
+        @(posedge clk);
+
+        // Pre-load r0=17, r1=27 into the committed reg file.
+        // The RAT's is_initial mechanism reads live through reg_file outputs, so no
+        // separate phys_regs write is needed — values are visible to the pipeline immediately.
+        dut.reg_file.registers[0] = 17;
+        dut.reg_file.registers[1] = 27;
 
         // Run until hlt or timeout
         timeout = 0;
@@ -83,24 +97,14 @@ module tb_tinker_core;
             $display("FAIL: timeout after %0d cycles", timeout);
         end else begin
             $display("Halted after %0d cycles", timeout);
-            // Check register results via architectural reg file
-            $display("r1 = %0d (expect 5)",  dut.reg_file.registers[1]);
-            $display("r2 = %0d (expect 7)",  dut.reg_file.registers[2]);
-            $display("r3 = %0d (expect 12)", dut.reg_file.registers[3]);
-            $display("r4 = %0d (expect 2)",  dut.reg_file.registers[4]);
-            $display("r5 = %0d (expect 24)", dut.reg_file.registers[5]);
-            $display("r6 = %0d (expect 7)",  dut.reg_file.registers[6]);
-            $display("r7 = %0d (expect 0)",  dut.reg_file.registers[7]);
-            $display("r8 = %0d (expect 2)",  dut.reg_file.registers[8]);
+            // Check register results: add r2, r0, r1  (r0=17, r1=27 pre-loaded → r2=44)
+            $display("r0 = %0d (expect 17)", dut.reg_file.registers[0]);
+            $display("r1 = %0d (expect 27)", dut.reg_file.registers[1]);
+            $display("r2 = %0d (expect 44)", dut.reg_file.registers[2]);
 
-            if (dut.reg_file.registers[1] == 64'd5  &&
-                dut.reg_file.registers[2] == 64'd7  &&
-                dut.reg_file.registers[3] == 64'd12 &&
-                dut.reg_file.registers[4] == 64'd2  &&
-                dut.reg_file.registers[5] == 64'd24 &&
-                dut.reg_file.registers[6] == 64'd7  &&
-                dut.reg_file.registers[7] == 64'd0  &&
-                dut.reg_file.registers[8] == 64'd2)
+            if (dut.reg_file.registers[0] == 64'd17 &&
+                dut.reg_file.registers[1] == 64'd27 &&
+                dut.reg_file.registers[2] == 64'd44)
                 $display("PASS: all registers correct");
             else
                 $display("FAIL: register mismatch");
